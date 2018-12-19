@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ping Pong Admin Panel</title>
+</head>
+<body>
+  <form method="post">
+    <label for="playername">Add player</label>
+    <input name="playername" id="playername" required>
+    <input type="submit" value="Add player">
+  </form>
+  <br>
+  <form method="post">
+    <label for="victorious">Victorious</label>
+    <input name="victorious" id="victorious" required>
+    <label for="defeated">Defeated</label>
+    <input name="defeated" id="defeated" required>
+    <input type="submit" value="Add match">
+  </form>
+  <h1>Player Elo Ranking</h1><br>
+  <table>
+      <thead><tr><th>Player</th><th>Ranking</th><th>Matches</th></tr></thead>
+      <tbody>
+{% for (name, elo, matches) in rating_list %}
+      <tr><td>{{ name }}</td> - <td>{{elo}}</td><td>{{matches}}</td></tr>
+{% endfor %}
+      </tbody>
+  </table>
+</body>
+</html>

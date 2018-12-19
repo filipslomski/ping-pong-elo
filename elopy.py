@@ -46,16 +46,16 @@ class Implementation:
                 return True
         return False
 
-    def addPlayer(self, name, rating=None):
+    def addPlayer(self, name, rating=None, matches=0):
         """
         Adds a new player to the implementation.
         @param name - The name to identify a specific player.
         @param rating - The player's rating.
         """
-        if rating == None:
+        if rating is None:
             rating = self.base_rating
 
-        self.players.append(_Player(name=name,rating=rating))
+        self.players.append(_Player(name=name,rating=rating,matches=matches))
 
     def removePlayer(self, name):
         """
@@ -106,7 +106,9 @@ class Implementation:
             newRating1 = rating1 - rating2
 
         player1.rating = newRating1
+        player1.matches += 1
         player2.rating = newRating2
+        player2.matches += 1
 
     def getPlayerRating(self, name):
         """
@@ -119,12 +121,12 @@ class Implementation:
 
     def getRatingList(self):
         """
-        Returns a list of tuples in the form of ({name},{rating})
+        Returns a list of tuples in the form of ({name},{rating}, {no_of_matches})
         @return - the list of tuples
         """
         lst = []
         for player in self.__getPlayerList():
-            lst.append((player.name,round(player.rating, 2)))
+            lst.append((player.name, round(player.rating, 2), player.matches))
         return sorted(lst, key=lambda tup: tup[1], reverse=True)
 
 class _Player:
@@ -132,7 +134,7 @@ class _Player:
     A class to represent a player in the Elo Rating System
     """
 
-    def __init__(self, name, rating):
+    def __init__(self, name, rating, matches=0):
         """
         Runs at initialization of class object.
         @param name - TODO
@@ -140,6 +142,7 @@ class _Player:
         """
         self.name = name
         self.rating = rating
+        self.matches = matches
 
     def compareRating(self, opponent):
         """
