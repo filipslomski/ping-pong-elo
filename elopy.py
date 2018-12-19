@@ -124,8 +124,8 @@ class Implementation:
         """
         lst = []
         for player in self.__getPlayerList():
-            lst.append((player.name,player.rating))
-        return lst
+            lst.append((player.name,round(player.rating, 2)))
+        return sorted(lst, key=lambda tup: tup[1], reverse=True)
 
 class _Player:
     """
