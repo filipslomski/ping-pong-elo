@@ -8,7 +8,7 @@ try:
     token = token_file.read().strip()
     file = open('ratings.txt', 'r')
     for player_data in file.readlines():
-        player_data_array = player_data.split(' ')
+        player_data_array = player_data.split('_')
         i.addPlayer(player_data_array[0], float(player_data_array[1]), int(player_data_array[2]))
 except FileNotFoundError:
     pass
@@ -32,7 +32,7 @@ def admin():
                               winner=victorious)
                 f = open("ratings.txt", "w+")
                 for (player, ranking, matches) in i.getRatingList():
-                    f.write("{} {} {}\n".format(player, ranking, matches))
+                    f.write("{}_{}_{}\n".format(player, ranking, matches))
                 f.close()
 
     return render_template('admin.html', rating_list=i.getRatingList())
