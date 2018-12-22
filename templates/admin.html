@@ -25,16 +25,16 @@
           <th><center>Player
           <th><center>Ranking
           <th><center>Matches
-          <th><center>Win streak
+          <th><center>Win streak</center>
       </tr></thead>
       <tbody>
 {% for (name, elo, matches, win_streak) in rating_list %}
       <tr>
-          <td><center>{{ loop.index }}
-          <td>{{ name }}
-          <td><center>{{elo}}
-          <td><center>{{matches}}
-          <td><center>{{win_streak}}
+          <td><center>{% if loop.index == 1%}<font color="blue"><strong>{% endif %}{{ loop.index }}
+          <td>{% if loop.index == 1%}<font color="blue"><strong>{% endif %}{{ name }}
+          <td><center>{% if loop.index == 1%}<font color="blue"><strong>{% endif %}{{elo}}
+          <td><center>{% if loop.index == 1%}<font color="blue"><strong>{% endif %}{{matches}}
+          <td><center>{% if loop.index == 1%}<font color="blue"><strong>{% endif %}{{win_streak}}</strong></font></center>
       </tr>
 {% endfor %}
       </tbody>
@@ -49,8 +49,8 @@
       <tbody>
 {% for (winner, defeated) in matches_list %}
     <tr>
-        <td><center><strong>&nbsp;{{ winner }}&nbsp;</strong>
-        <td><center>&nbsp;{{ defeated }}&nbsp;
+        <td><center><font color="green"><strong>&nbsp;{{ winner }}&nbsp;</strong></font>
+        <td><center>&nbsp;{{ defeated }}&nbsp;</center>
     </tr>
 {% endfor %}
       </tbody>
