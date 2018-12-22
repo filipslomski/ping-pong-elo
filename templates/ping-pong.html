@@ -5,12 +5,22 @@
     <title>Ping Pong Ranking</title>
 </head>
 <body>
-  <h1>Player Elo Ranking</h1><br>
+  <h1>Elo Ranking</h1><br>
   <table>
       <thead><tr><th>Player</th><th>Ranking</th><th>Matches</th></tr></thead>
       <tbody>
 {% for (name, elo, matches) in rating_list %}
-      <tr><td>{{ name }}</td> - <td>{{elo}}</td><td>{{matches}}</td></tr>
+      <tr><td>{{ name }}</td><td>{{elo}}</td><td>{{matches}}</td></tr>
+{% endfor %}
+      </tbody>
+  </table>
+  <br>
+  <h1>Match history</h1><br>
+  <table>
+      <thead><tr><th>Winner</th><th>Defeated</th></tr></thead>
+      <tbody>
+{% for (winner, defeated) in matches_list %}
+    <tr><td><strong>{{ winner }}</strong></td><td>{{ defeated }}</td></tr>
 {% endfor %}
       </tbody>
   </table>

@@ -27,5 +27,15 @@
 {% endfor %}
       </tbody>
   </table>
+  <br>
+  <h1>Match history</h1><br>
+  <table>
+      <thead><tr><th>Winner</th><th>Defeated</th></tr></thead>
+      <tbody>
+{% for (winner, defeated) in matches_list %}
+    <tr><td><strong>{{ winner }}</strong></td><td>{{ defeated }}</td></tr>
+{% endfor %}
+      </tbody>
+  </table>
 </body>
 </html>

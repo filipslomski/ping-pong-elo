@@ -16,6 +16,7 @@ class Implementation:
         """
         self.base_rating = base_rating
         self.players = []
+        self.matches = []
 
     def __getPlayerList(self):
         """
@@ -64,6 +65,8 @@ class Implementation:
         """
         self.__getPlayerList().remove(self.getPlayer(name))
 
+    def addMatchToList(self, winner, defeated):
+        self.matches.append((winner, defeated))
 
     def recordMatch(self, name1, name2, winner=None, draw=False):
         """
@@ -110,6 +113,8 @@ class Implementation:
         player2.rating = newRating2
         player2.matches += 1
 
+        self.matches.append((name1, name2) if name1 == winner else (name2, name1))
+
     def getPlayerRating(self, name):
         """
         Returns the rating of the player with the given name.
@@ -128,6 +133,10 @@ class Implementation:
         for player in self.__getPlayerList():
             lst.append((player.name, round(player.rating, 2), player.matches))
         return sorted(lst, key=lambda tup: tup[1], reverse=True)
+
+    def getMatchesList(self):
+        return self.matches
+
 
 class _Player:
     """
