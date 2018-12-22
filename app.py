@@ -4,9 +4,6 @@ from elopy import *
 app = Flask(__name__)
 i = Implementation()
 try:
-    file = open('ratings.txt', 'r')
-    for player_data in file.readlines():
-        player_data_array = player_data.split(' ')
     token_file = open('token.txt', 'r')
     token = token_file.read().strip()
     file = open('ratings.txt', 'r')
