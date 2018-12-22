@@ -18,22 +18,40 @@
     <input name="defeated" id="defeated" required>
     <input id="addmatch" type="submit" value="Add match">
   </form>
-  <h1>Player Elo Ranking</h1><br>
-  <table>
-      <thead><tr><th>Player</th><th>Ranking</th><th>Matches</th></tr></thead>
+    <h1>Elo Ranking</h1>
+  <table border="6">
+      <thead><tr>
+          <th><center>Position
+          <th><center>Player
+          <th><center>Ranking
+          <th><center>Matches
+          <th><center>Win streak
+      </tr></thead>
       <tbody>
-{% for (name, elo, matches) in rating_list %}
-      <tr><td>{{ name }}</td> - <td>{{elo}}</td><td>{{matches}}</td></tr>
+{% for (name, elo, matches, win_streak) in rating_list %}
+      <tr>
+          <td><center>{{ loop.index }}
+          <td>{{ name }}
+          <td><center>{{elo}}
+          <td><center>{{matches}}
+          <td><center>{{win_streak}}
+      </tr>
 {% endfor %}
       </tbody>
   </table>
   <br>
-  <h1>Match history</h1><br>
-  <table>
-      <thead><tr><th>Winner</th><th>Defeated</th></tr></thead>
+  <h1>Match history</h1>
+  <table border="6">
+      <thead><tr>
+          <th><center>Winner
+          <th><center>Defeated
+      </tr></thead>
       <tbody>
 {% for (winner, defeated) in matches_list %}
-    <tr><td><strong>{{ winner }}</strong></td><td>{{ defeated }}</td></tr>
+    <tr>
+        <td><center><strong>&nbsp;{{ winner }}&nbsp;</strong>
+        <td><center>&nbsp;{{ defeated }}&nbsp;
+    </tr>
 {% endfor %}
       </tbody>
   </table>

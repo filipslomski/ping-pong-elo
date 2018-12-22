@@ -47,7 +47,7 @@ class Implementation:
                 return True
         return False
 
-    def addPlayer(self, name, rating=None, matches=0):
+    def addPlayer(self, name, rating=None, matches=0, win_streak=0):
         """
         Adds a new player to the implementation.
         @param name - The name to identify a specific player.
@@ -56,7 +56,7 @@ class Implementation:
         if rating is None:
             rating = self.base_rating
 
-        self.players.append(_Player(name=name,rating=rating,matches=matches))
+        self.players.append(_Player(name=name,rating=rating,matches=matches,win_streak=win_streak))
 
     def removePlayer(self, name):
         """
@@ -113,7 +113,14 @@ class Implementation:
         player2.rating = newRating2
         player2.matches += 1
 
-        self.matches.append((name1, name2) if name1 == winner else (name2, name1))
+        if name1 == winner:
+            self.matches.append((name1, name2))
+            player1.win_streak += 1
+            player2.win_streak = 0
+        else:
+            self.matches.append((name2, name1))
+            player1.win_streak = 0
+            player2.win_streak += 1
 
     def getPlayerRating(self, name):
         """
@@ -131,7 +138,7 @@ class Implementation:
         """
         lst = []
         for player in self.__getPlayerList():
-            lst.append((player.name, round(player.rating, 2), player.matches))
+            lst.append((player.name, int(player.rating), player.matches, player.win_streak))
         return sorted(lst, key=lambda tup: tup[1], reverse=True)
 
     def getMatchesList(self):
@@ -143,7 +150,7 @@ class _Player:
     A class to represent a player in the Elo Rating System
     """
 
-    def __init__(self, name, rating, matches=0):
+    def __init__(self, name, rating, matches=0, win_streak=0):
         """
         Runs at initialization of class object.
         @param name - TODO
@@ -152,6 +159,7 @@ class _Player:
         self.name = name
         self.rating = rating
         self.matches = matches
+        self.win_streak = win_streak
 
     def compareRating(self, opponent):
         """
