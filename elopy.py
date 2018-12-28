@@ -1,9 +1,3 @@
-"""
-Created 5-18-17
-All of the classes for EloPy. The users should only interact with the Implementation class.
-@author - Hank Hang Kai Sheehan
-"""
-
 class Implementation:
     """
     A class that represents an implementation of the Elo Rating System

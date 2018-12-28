@@ -1,4 +1,7 @@
 from flask import Flask, render_template, request
+import sys
+import os
+sys.path.append(os.getcwd())
 from elopy import *
 
 app = Flask(__name__)
@@ -10,7 +13,7 @@ try:
     rating_file = open('ratings.txt', 'r')
     for player_data in rating_file.readlines():
         player_data_array = player_data.split('_')
-        i.addPlayer(player_data_array[0], float(player_data_array[1]), int(player_data_array[2]), player_data_array[3])
+        i.addPlayer(player_data_array[0], float(player_data_array[1]), int(player_data_array[2]), int(player_data_array[3]))
     rating_file.close()
     match_file = open('matches.txt', 'r')
     for match_data in match_file.readlines():

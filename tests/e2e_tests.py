@@ -8,7 +8,7 @@ class RankingDisplay(unittest.TestCase):
     def setUp(self):
         self.driver = webdriver.Chrome('chromedriver')
 
-    def test_search_in_python_org(self):
+    def test_ranking_display(self):
         self.driver.get('localhost:5000')
         self.driver.find_element_by_id('ping-pong').click()
         assert self.driver.find_element_by_xpath('.//h1').text == 'Player Elo Ranking'
@@ -25,7 +25,7 @@ class AddingPlayer(unittest.TestCase):
         self.token = f.read().strip()
         f.close()
 
-    def test_search_in_python_org(self):
+    def test_adding_player(self):
         self.driver.get('localhost:5000/admin')
         self.driver.find_element_by_id('playername').clear()
         self.driver.find_element_by_id('playername').send_keys('{} player1'.format(self.token))
@@ -36,12 +36,13 @@ class AddingPlayer(unittest.TestCase):
     def tearDown(self):
         self.driver.close()
 
+
 class TokenAuthorization(unittest.TestCase):
 
     def setUp(self):
         self.driver = webdriver.Chrome('chromedriver')
 
-    def test_search_in_python_org(self):
+    def test_token(self):
         self.driver.get('localhost:5000/admin')
         self.driver.find_element_by_id('playername').clear()
         self.driver.find_element_by_id('playername').send_keys('player33')
@@ -60,5 +61,12 @@ def is_visible(elem):
     except NoSuchElementException:
         return False
 
-if __name__ == "__main__":
-    unittest.main()
+
+suite = unittest.TestLoader().loadTestsFromTestCase(RankingDisplay)
+suite2 = unittest.TestLoader().loadTestsFromTestCase(AddingPlayer)
+suite3 = unittest.TestLoader().loadTestsFromTestCase(TokenAuthorization)
+unittest.TextTestRunner(verbosity=2).run(suite)
+unittest.TextTestRunner(verbosity=2).run(suite2)
+unittest.TextTestRunner(verbosity=2).run(suite3)
+#if __name__ == "__main__":
+#    unittest.main()
