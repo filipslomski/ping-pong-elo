@@ -39,15 +39,7 @@ def admin():
         else:
             if request.form['victorious'].split(' ', 1)[0] == token:
                 victorious = request.form['victorious'].split(' ', 1)[1]
-                i.recordMatch(victorious, request.form['defeated'], winner=victorious)
-                rating_file = open("ratings.txt", "w+")
-                match_file = open("matches.txt", "w+")
-                for (player, ranking, matches, win_streak) in i.getRatingList():
-                    rating_file.write("{}_{}_{}_{}\n".format(player, ranking, matches, win_streak))
-                for (winner, defeated) in i.getMatchesList():
-                    match_file.write("{}_{}\n".format(winner, defeated))
-                rating_file.close()
-                match_file.close()
+                record_match_and_update_files(victorious, request.form['defeated'])
 
     return render_template('admin.html', rating_list=i.getRatingList(), matches_list = i.getMatchesList())
 
@@ -60,3 +52,23 @@ def ping_pong():
 @app.route('/fifa')
 def fifa():
     return render_template('fifa.html')
+
+
+def record_match_and_update_files(victorius, defeated):
+    i.recordMatch(victorius, defeated, winner=victorius)
+    save_ratings_to_file()
+    save_matches_to_file()
+
+
+def save_ratings_to_file(file_name="ratings.txt"):
+    rating_file = open(file_name, "w+")
+    for (player, ranking, matches, win_streak) in i.getRatingList():
+        rating_file.write("{}_{}_{}_{}\n".format(player, ranking, matches, win_streak))
+    rating_file.close()
+
+
+def save_matches_to_file(file_name="matches.txt"):
+    match_file = open(file_name, "w+")
+    for (winner, defeated) in i.getMatchesList():
+        match_file.write("{}_{}\n".format(winner, defeated))
+    match_file.close()

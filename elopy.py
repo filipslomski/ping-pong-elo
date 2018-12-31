@@ -3,14 +3,14 @@ class Implementation:
     A class that represents an implementation of the Elo Rating System
     """
 
-    def __init__(self, base_rating=1000):
+    def __init__(self, base_rating=1000, base_players=None, base_matches=None):
         """
         Runs at initialization of class object.
         @param base_rating - The rating a new player would have
         """
         self.base_rating = base_rating
-        self.players = []
-        self.matches = []
+        self.players = [] if base_players is None else base_players
+        self.matches = [] if base_matches is None else base_matches
 
     def __getPlayerList(self):
         """
@@ -50,7 +50,7 @@ class Implementation:
         if rating is None:
             rating = self.base_rating
 
-        self.players.append(_Player(name=name,rating=rating,matches=matches,win_streak=win_streak))
+        self.players.append(Player(name=name,rating=rating,matches=matches,win_streak=win_streak))
 
     def removePlayer(self, name):
         """
@@ -139,7 +139,7 @@ class Implementation:
         return self.matches
 
 
-class _Player:
+class Player:
     """
     A class to represent a player in the Elo Rating System
     """
