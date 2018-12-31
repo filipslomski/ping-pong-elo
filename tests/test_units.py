@@ -2,6 +2,7 @@ import sys
 import os
 sys.path.append(os.getcwd())
 from elopy import *
+from app import *
 import pytest
 
 
@@ -12,8 +13,7 @@ def empty_rating():
 
 @pytest.fixture
 def filled_rating():
-    return Implementation(1000, [Player('Player1', 1200, 2, 2), Player('Player2', 900, 2, 0)],
-                          [('Player1', 'Player2'), ('Player1', 'Player2')])
+    return Implementation(1000, [Player('Player1', 1200, 2, 2), Player('Player2', 900, 2, 0)])
 
 
 @pytest.mark.unit_test
@@ -31,6 +31,22 @@ def test_add_players_and_get_ratings(empty_rating):
 
 
 @pytest.mark.unit_test
+def test_add_matches_and_get_match_history(filled_rating):
+    filled_rating.recordMatch('Player1', 'Player2', 'Player1')
+    assert ('Player1', 'Player2') in filled_rating.getMatchesList()
+
+
+@pytest.mark.unit_test
+def test_check_ratings_change(filled_rating):
+    starting_player1_rating = filled_rating.getPlayerRating('Player1')
+    starting_player2_rating = filled_rating.getPlayerRating('Player1')
+    filled_rating.recordMatch('Player1', 'Player2', 'Player1')
+    assert filled_rating.getPlayerRating('Player1') > starting_player1_rating
+    assert filled_rating.getPlayerRating('Player2') < starting_player2_rating
+
+
+
+@pytest.mark.unit_test
 def test_remove_players_and_get_ratings(filled_rating):
     filled_rating.removePlayer('Player2')
     assert len(filled_rating.getRatingList()) == 1
@@ -38,8 +54,8 @@ def test_remove_players_and_get_ratings(filled_rating):
 
 
 @pytest.mark.unit_test
-def test_save_ratings_to_file():
-    pass
+def test_save_ratings_and_matches_to_file(filled_rating):
+    record_match_and_update_files(filled_rating, 'Player1', 'Player2')
 
 
 @pytest.mark.unit_test
