@@ -55,7 +55,25 @@ def test_remove_players_and_get_ratings(filled_rating):
 
 @pytest.mark.unit_test
 def test_save_ratings_and_matches_to_file(filled_rating):
-    record_match_and_update_files(filled_rating, 'Player1', 'Player2')
+    record_match_and_update_files(filled_rating, 'Player1', 'Player2', 'test_ratings.txt', 'test_matches.txt')
+    rating_file = open('test_ratings.txt', 'r')
+    for player_data in rating_file.readlines():
+        player_data_array = player_data.split('_')
+        assert len(player_data_array) == 4
+        assert player_data_array[0] in ('Player1', 'Player2')
+        assert int(player_data_array[2]) == 3
+        assert int(player_data_array[3]) in (0, 3)
+    rating_file.close()
+    os.remove('test_ratings.txt')
+    match_file = open('test_matches.txt', 'r')
+    for match_data in match_file.readlines():
+        if '_' in match_data:
+            match_data_array = match_data.split('_')
+            assert len(match_data_array) == 2
+            assert match_data_array[0] == 'Player1'
+            assert match_data_array[1].rstrip() == 'Player2'
+    match_file.close()
+    os.remove('test_matches.txt')
 
 
 @pytest.mark.unit_test

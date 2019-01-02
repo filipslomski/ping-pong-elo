@@ -24,7 +24,7 @@ def load_data_from_file(rating):
         for match_data in match_file.readlines():
             if '_' in match_data:
                 match_data_array = match_data.split('_')
-                rating.addMatchToList(match_data_array[0], match_data_array[1])
+                rating.addMatchToList(match_data_array[0], match_data_array[1].rstrip())
         match_file.close()
     except FileNotFoundError:
         if token is None:
@@ -65,10 +65,10 @@ def fifa():
     return render_template('fifa.html')
 
 
-def record_match_and_update_files(rating, victorius, defeated):
+def record_match_and_update_files(rating, victorius, defeated, rating_file='ratings.txt', match_file='matches.txt'):
     rating.recordMatch(victorius, defeated, winner=victorius)
-    save_ratings_to_file(rating)
-    save_matches_to_file(rating)
+    save_ratings_to_file(rating, rating_file)
+    save_matches_to_file(rating, match_file)
 
 
 def save_ratings_to_file(rating, file_name="ratings.txt"):
