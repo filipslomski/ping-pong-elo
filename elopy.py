@@ -139,7 +139,7 @@ class Implementation:
         return sorted(lst, key=lambda tup: tup[1], reverse=True)
 
     def getMatchesList(self):
-        return self.matches
+        return reversed(self.matches)
 
 
 class Player:
