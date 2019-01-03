@@ -13,7 +13,7 @@ def empty_rating():
 
 @pytest.fixture
 def filled_rating():
-    return Implementation(1000, [Player('Player1', 1200, 2, 2), Player('Player2', 900, 2, 0)])
+    return Implementation(1000, [Player('Player1', 1200, 2, 2, 1200), Player('Player2', 900, 2, 0, 1000)])
 
 
 @pytest.mark.unit_test
@@ -23,11 +23,11 @@ def test_default_rating(empty_rating):
 
 @pytest.mark.unit_test
 def test_add_players_and_get_ratings(empty_rating):
-    empty_rating.addPlayer('Name1', 1500, 5, 0)
-    empty_rating.addPlayer('Name2', 1600, 6, 2)
+    empty_rating.addPlayer('Name1', 1500, 5, 0, 1700)
+    empty_rating.addPlayer('Name2', 1600, 6, 2, 1800)
     assert len(empty_rating.getRatingList()) == 2
-    assert ('Name1', 1500, 5, 0) in empty_rating.getRatingList()
-    assert ('Name2', 1600, 6, 2) in empty_rating.getRatingList()
+    assert ('Name1', 1500, 5, 0, 1700) in empty_rating.getRatingList()
+    assert ('Name2', 1600, 6, 2, 1800) in empty_rating.getRatingList()
 
 
 @pytest.mark.unit_test
@@ -59,7 +59,7 @@ def test_save_ratings_and_matches_to_file(filled_rating):
     rating_file = open('test_ratings.txt', 'r')
     for player_data in rating_file.readlines():
         player_data_array = player_data.split('_')
-        assert len(player_data_array) == 4
+        assert len(player_data_array) == 5
         assert player_data_array[0] in ('Player1', 'Player2')
         assert int(player_data_array[2]) == 3
         assert int(player_data_array[3]) in (0, 3)

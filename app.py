@@ -18,7 +18,7 @@ def load_data_from_file(rating):
         for player_data in rating_file.readlines():
             player_data_array = player_data.split('_')
             rating.addPlayer(player_data_array[0], float(player_data_array[1]), int(player_data_array[2]),
-                        int(player_data_array[3]))
+                        int(player_data_array[3]), float(player_data_array[4]))
         rating_file.close()
         match_file = open('matches.txt', 'r')
         for match_data in match_file.readlines():
@@ -73,8 +73,8 @@ def record_match_and_update_files(rating, victorius, defeated, rating_file='rati
 
 def save_ratings_to_file(rating, file_name="ratings.txt"):
     rating_file = open(file_name, "w+")
-    for (player, ranking, matches, win_streak) in rating.getRatingList():
-        rating_file.write("{}_{}_{}_{}\n".format(player, ranking, matches, win_streak))
+    for (player, ranking, matches, win_streak, highest_rating) in rating.getRatingList():
+        rating_file.write("{}_{}_{}_{}_{}\n".format(player, ranking, matches, win_streak, highest_rating))
     rating_file.close()
 
 

@@ -41,7 +41,7 @@ class Implementation:
                 return True
         return False
 
-    def addPlayer(self, name, rating=None, matches=0, win_streak=0):
+    def addPlayer(self, name, rating=None, matches=0, win_streak=0, highest_rating=1000):
         """
         Adds a new player to the implementation.
         @param name - The name to identify a specific player.
@@ -50,7 +50,8 @@ class Implementation:
         if rating is None:
             rating = self.base_rating
 
-        self.players.append(Player(name=name,rating=rating,matches=matches,win_streak=win_streak))
+        self.players.append(
+            Player(name=name, rating=rating, matches=matches, win_streak=win_streak, highest_rating=highest_rating))
 
     def removePlayer(self, name):
         """
@@ -103,8 +104,10 @@ class Implementation:
             newRating1 = rating1 - rating2
 
         player1.rating = newRating1
+        player1.highest_rating = newRating1 if newRating1 > player1.highest_rating else player1.highest_rating
         player1.matches += 1
         player2.rating = newRating2
+        player2.highest_rating = newRating1 if newRating2 > player2.highest_rating else player2.highest_rating
         player2.matches += 1
 
         if name1 == winner:
@@ -132,7 +135,7 @@ class Implementation:
         """
         lst = []
         for player in self.__getPlayerList():
-            lst.append((player.name, int(player.rating), player.matches, player.win_streak))
+            lst.append((player.name, int(player.rating), player.matches, player.win_streak, int(player.highest_rating)))
         return sorted(lst, key=lambda tup: tup[1], reverse=True)
 
     def getMatchesList(self):
@@ -144,7 +147,7 @@ class Player:
     A class to represent a player in the Elo Rating System
     """
 
-    def __init__(self, name, rating, matches=0, win_streak=0):
+    def __init__(self, name, rating, matches=0, win_streak=0, highest_rating=1000):
         """
         Runs at initialization of class object.
         @param name - TODO
@@ -154,6 +157,7 @@ class Player:
         self.rating = rating
         self.matches = matches
         self.win_streak = win_streak
+        self.highest_rating = highest_rating
 
     def compareRating(self, opponent):
         """
