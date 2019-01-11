@@ -118,6 +118,8 @@ class Implementation:
             self.matches.append((name2, name1))
             player1.win_streak = 0
             player2.win_streak += 1
+        player1.update_rank_image()
+        player2.update_rank_image()
 
     def getPlayerRating(self, name):
         """
@@ -135,7 +137,8 @@ class Implementation:
         """
         lst = []
         for player in self.__getPlayerList():
-            lst.append((player.name, int(player.rating), player.matches, player.win_streak, int(player.highest_rating)))
+            lst.append((player.name, int(player.rating), player.matches, player.win_streak, int(player.highest_rating),
+                        player.rank_image))
         return sorted(lst, key=lambda tup: tup[1], reverse=True)
 
     def getMatchesList(self):
@@ -158,6 +161,8 @@ class Player:
         self.matches = matches
         self.win_streak = win_streak
         self.highest_rating = highest_rating
+        self.rank_image = None
+        self.update_rank_image()
 
     def compareRating(self, opponent):
         """
@@ -166,3 +171,17 @@ class Player:
         @returns - The expected score between the two players.
         """
         return ( 1+10**( ( opponent.rating-self.rating )/400.0 ) ) ** -1
+
+    def update_rank_image(self):
+        rank_images = {
+            (0, 950): 'https://upload.wikimedia.org/wikipedia/commons/0/05/US-O1_insignia.svg',
+            (951, 1000): 'https://upload.wikimedia.org/wikipedia/commons/7/72/US-O2_insignia.svg',
+            (1001, 1050): 'https://upload.wikimedia.org/wikipedia/commons/7/72/US-O3_insignia.svg',
+            (1051, 1100): 'https://upload.wikimedia.org/wikipedia/commons/8/8f/US-O4_insignia.svg',
+            (1101, 1150): 'https://upload.wikimedia.org/wikipedia/commons/6/6e/US-O5_insignia.svg',
+            (1151, 1200): 'https://upload.wikimedia.org/wikipedia/commons/c/c5/US-O6_insignia.svg',
+            (1201, 5000): 'https://upload.wikimedia.org/wikipedia/commons/2/23/US-O7_insignia.svg',
+        }
+        for rating_range, image_url in rank_images.items():
+            if rating_range[0] <= self.rating <= rating_range[1]:
+                self.rank_image = image_url

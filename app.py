@@ -73,7 +73,7 @@ def record_match_and_update_files(rating, victorius, defeated, rating_file='rati
 
 def save_ratings_to_file(rating, file_name="ratings.txt"):
     rating_file = open(file_name, "w+")
-    for (player, ranking, matches, win_streak, highest_rating) in rating.getRatingList():
+    for (player, ranking, matches, win_streak, highest_rating, rank_image) in rating.getRatingList():
         rating_file.write("{}_{}_{}_{}_{}\n".format(player, ranking, matches, win_streak, highest_rating))
     rating_file.close()
 

@@ -26,8 +26,8 @@ def test_add_players_and_get_ratings(empty_rating):
     empty_rating.addPlayer('Name1', 1500, 5, 0, 1700)
     empty_rating.addPlayer('Name2', 1600, 6, 2, 1800)
     assert len(empty_rating.getRatingList()) == 2
-    assert ('Name1', 1500, 5, 0, 1700) in empty_rating.getRatingList()
-    assert ('Name2', 1600, 6, 2, 1800) in empty_rating.getRatingList()
+    assert ('Name1', 1500, 5, 0, 1700, 'https://upload.wikimedia.org/wikipedia/commons/2/23/US-O7_insignia.svg') in empty_rating.getRatingList()
+    assert ('Name2', 1600, 6, 2, 1800, 'https://upload.wikimedia.org/wikipedia/commons/2/23/US-O7_insignia.svg') in empty_rating.getRatingList()
 
 
 @pytest.mark.unit_test
