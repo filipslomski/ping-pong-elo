@@ -174,13 +174,24 @@ class Player:
 
     def update_rank_image(self):
         rank_images = {
-            (0, 950): 'https://upload.wikimedia.org/wikipedia/commons/0/05/US-O1_insignia.svg',
-            (951, 1000): 'https://upload.wikimedia.org/wikipedia/commons/7/72/US-O2_insignia.svg',
-            (1001, 1050): 'https://upload.wikimedia.org/wikipedia/commons/7/72/US-O3_insignia.svg',
-            (1051, 1100): 'https://upload.wikimedia.org/wikipedia/commons/8/8f/US-O4_insignia.svg',
-            (1101, 1150): 'https://upload.wikimedia.org/wikipedia/commons/6/6e/US-O5_insignia.svg',
-            (1151, 1200): 'https://upload.wikimedia.org/wikipedia/commons/c/c5/US-O6_insignia.svg',
-            (1201, 5000): 'https://upload.wikimedia.org/wikipedia/commons/2/23/US-O7_insignia.svg',
+            (0, 900): 'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CSGO/0e457516ba13817a45b6c2a1d262fe7d0599bcbc/csgo/pak01_dir/resource/flash/econ/status_icons/skillgroup1.png',
+            (901, 950): 'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CSGO/0e457516ba13817a45b6c2a1d262fe7d0599bcbc/csgo/pak01_dir/resource/flash/econ/status_icons/skillgroup2.png',
+            (951, 1000): 'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CSGO/0e457516ba13817a45b6c2a1d262fe7d0599bcbc/csgo/pak01_dir/resource/flash/econ/status_icons/skillgroup3.png',
+            (1001, 1050): 'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CSGO/0e457516ba13817a45b6c2a1d262fe7d0599bcbc/csgo/pak01_dir/resource/flash/econ/status_icons/skillgroup4.png',
+            (1051, 1100): 'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CSGO/0e457516ba13817a45b6c2a1d262fe7d0599bcbc/csgo/pak01_dir/resource/flash/econ/status_icons/skillgroup5.png',
+            (1101, 1150): 'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CSGO/0e457516ba13817a45b6c2a1d262fe7d0599bcbc/csgo/pak01_dir/resource/flash/econ/status_icons/skillgroup6.png',
+            (1151, 1200): 'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CSGO/0e457516ba13817a45b6c2a1d262fe7d0599bcbc/csgo/pak01_dir/resource/flash/econ/status_icons/skillgroup7.png',
+            (1201, 1250): 'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CSGO/0e457516ba13817a45b6c2a1d262fe7d0599bcbc/csgo/pak01_dir/resource/flash/econ/status_icons/skillgroup8.png',
+            (1251, 1300): 'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CSGO/0e457516ba13817a45b6c2a1d262fe7d0599bcbc/csgo/pak01_dir/resource/flash/econ/status_icons/skillgroup9.png',
+            (1301, 1350): 'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CSGO/0e457516ba13817a45b6c2a1d262fe7d0599bcbc/csgo/pak01_dir/resource/flash/econ/status_icons/skillgroup10.png',
+            (1351, 1400): 'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CSGO/0e457516ba13817a45b6c2a1d262fe7d0599bcbc/csgo/pak01_dir/resource/flash/econ/status_icons/skillgroup11.png',
+            (1401, 1450): 'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CSGO/0e457516ba13817a45b6c2a1d262fe7d0599bcbc/csgo/pak01_dir/resource/flash/econ/status_icons/skillgroup12.png',
+            (1451, 1500): 'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CSGO/0e457516ba13817a45b6c2a1d262fe7d0599bcbc/csgo/pak01_dir/resource/flash/econ/status_icons/skillgroup13.png',
+            (1501, 1550): 'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CSGO/0e457516ba13817a45b6c2a1d262fe7d0599bcbc/csgo/pak01_dir/resource/flash/econ/status_icons/skillgroup14.png',
+            (1551, 1600): 'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CSGO/0e457516ba13817a45b6c2a1d262fe7d0599bcbc/csgo/pak01_dir/resource/flash/econ/status_icons/skillgroup15.png',
+            (1601, 1650): 'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CSGO/0e457516ba13817a45b6c2a1d262fe7d0599bcbc/csgo/pak01_dir/resource/flash/econ/status_icons/skillgroup16.png',
+            (1651, 1700): 'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CSGO/0e457516ba13817a45b6c2a1d262fe7d0599bcbc/csgo/pak01_dir/resource/flash/econ/status_icons/skillgroup17.png',
+            (1701, 5000): 'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CSGO/0e457516ba13817a45b6c2a1d262fe7d0599bcbc/csgo/pak01_dir/resource/flash/econ/status_icons/skillgroup18.png',
         }
         for rating_range, image_url in rank_images.items():
             if rating_range[0] <= self.rating <= rating_range[1]:

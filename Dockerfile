@@ -5,12 +5,13 @@ LABEL description="Run flask application."
 EXPOSE 5000
 
 RUN apt-get update
-COPY requirements.txt /tmp
-WORKDIR /tmp
+RUN apt-get install -y build-essential
 RUN pip install --upgrade pip
+
+WORKDIR /tmp
+COPY requirements.txt /tmp
 RUN pip install -r requirements.txt
 
-RUN apt-get install -y build-essential
 WORKDIR /usr/src/app
 
 CMD [ "python", "-m", "flask", "run", "--host=0.0.0.0" ]
