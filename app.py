@@ -62,20 +62,19 @@ def ping_pong():
 
 @app.route('/get_ratings')
 def get_ratings():
-    dict = {}
-    iterator = 1
+    array = []
     for player_rating in rating.getRatingList():
-        dict[iterator ] = {}
-        dict[iterator]['name'] = player_rating[0]
-        dict[iterator]['rating'] = player_rating[1]
-        dict[iterator]['matches'] = player_rating[2]
-        dict[iterator]['win_streak'] = player_rating[3]
-        dict[iterator]['highest_rating'] = player_rating[4]
-        dict[iterator]['rank_image'] = player_rating[5]
-        dict[iterator]['victories'] = player_rating[6]
-        iterator += 1
+        dict = {}
+        dict['name'] = player_rating[0]
+        dict['rating'] = player_rating[1]
+        dict['matches'] = player_rating[2]
+        dict['win_streak'] = player_rating[3]
+        dict['highest_rating'] = player_rating[4]
+        dict['rank_image'] = player_rating[5]
+        dict['victories'] = player_rating[6]
+        array.append(dict)
 
-    return jsonify(dict)
+    return jsonify(array)
 
 
 @app.route('/fifa')
