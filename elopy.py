@@ -92,8 +92,14 @@ class Implementation:
         else:
             raise InputError('One of the names must be the winner or draw must be True')
 
-        newRating1 = rating1 + k * (score1 - expected1)
-        newRating2 = rating2 + k * (score2 - expected2)
+        player1_lost_points_modifier = 1
+        player2_lost_points_modifier = 1
+        if winner == name1:
+            player2_lost_points_modifier = 0.9
+        else:
+            player1_lost_points_modifier = 0.9
+        newRating1 = rating1 + player1_lost_points_modifier * k * (score1 - expected1)
+        newRating2 = rating2 + player2_lost_points_modifier * k * (score2 - expected2)
 
         if newRating1 < 0:
             newRating1 = 0
