@@ -41,7 +41,7 @@ class Implementation:
                 return True
         return False
 
-    def addPlayer(self, name, rating=None, matches=0, win_streak=0, highest_rating=1000):
+    def addPlayer(self, name, rating=None, matches=0, win_streak=0, highest_rating=1000, victories=0):
         """
         Adds a new player to the implementation.
         @param name - The name to identify a specific player.
@@ -51,7 +51,8 @@ class Implementation:
             rating = self.base_rating
 
         self.players.append(
-            Player(name=name, rating=rating, matches=matches, win_streak=win_streak, highest_rating=highest_rating))
+            Player(name=name, rating=rating, matches=matches, win_streak=win_streak, highest_rating=highest_rating,
+                   victories=victories))
 
     def removePlayer(self, name):
         """
@@ -119,10 +120,12 @@ class Implementation:
         if name1 == winner:
             self.matches.append((name1, name2))
             player1.win_streak += 1
+            player1.victories += 1
             player2.win_streak = 0
         else:
             self.matches.append((name2, name1))
             player1.win_streak = 0
+            player2.victories += 1
             player2.win_streak += 1
         player1.update_rank_image()
         player2.update_rank_image()
@@ -144,7 +147,7 @@ class Implementation:
         lst = []
         for player in self.__getPlayerList():
             lst.append((player.name, int(player.rating), player.matches, player.win_streak, int(player.highest_rating),
-                        player.rank_image))
+                        player.rank_image, player.victories))
         return sorted(lst, key=lambda tup: tup[1], reverse=True)
 
     def getMatchesList(self):
@@ -156,7 +159,7 @@ class Player:
     A class to represent a player in the Elo Rating System
     """
 
-    def __init__(self, name, rating, matches=0, win_streak=0, highest_rating=1000):
+    def __init__(self, name, rating, matches=0, win_streak=0, highest_rating=1000, victories = 0):
         """
         Runs at initialization of class object.
         @param name - TODO
@@ -167,6 +170,7 @@ class Player:
         self.matches = matches
         self.win_streak = win_streak
         self.highest_rating = highest_rating
+        self.victories = victories
         self.rank_image = None
         self.update_rank_image()
 

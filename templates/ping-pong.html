@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>Elo Ranking</h1>
-  <table border="6">
+   <table border="6">
       <thead><tr>
           <th><center>Position
           <th><center>Player
@@ -14,11 +14,12 @@
           <th><center>Ranking
           <th><center>Highest ranking
           <th><center>Matches
+          <th><center>Victories
           <th><center>Win streak
           </center>
       </tr></thead>
       <tbody>
-{% for (name, elo, matches, win_streak, highest_ranking, rank_image) in rating_list %}
+{% for (name, elo, matches, win_streak, highest_ranking, rank_image, victories) in rating_list %}
       <tr>
           <td><center>{% if loop.index == 1%}<font color="blue"><strong>{% endif %}{{ loop.index }}
           <td>{% if loop.index == 1%}<font color="blue"><strong>{% endif %}{{ name }}
@@ -26,6 +27,7 @@
           <td><center>{% if loop.index == 1%}<font color="blue"><strong>{% endif %}<b>{{elo}}</b>
           <td><center>{% if loop.index == 1%}<font color="blue"><strong>{% endif %}{{highest_ranking}}
           <td><center>{% if loop.index == 1%}<font color="blue"><strong>{% endif %}{{matches}}
+          <td><center>{% if loop.index == 1%}<font color="blue"><strong>{% endif %}{{victories}}
           <td><center>{% if loop.index == 1%}<font color="blue"><strong>{% endif %}{{win_streak}}
           </strong></font></center>
       </tr>

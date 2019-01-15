@@ -26,8 +26,12 @@ def test_add_players_and_get_ratings(empty_rating):
     empty_rating.addPlayer('Name1', 1500, 5, 0, 1700)
     empty_rating.addPlayer('Name2', 1600, 6, 2, 1800)
     assert len(empty_rating.getRatingList()) == 2
-    assert ('Name1', 1500, 5, 0, 1700, 'https://upload.wikimedia.org/wikipedia/commons/2/23/US-O7_insignia.svg') in empty_rating.getRatingList()
-    assert ('Name2', 1600, 6, 2, 1800, 'https://upload.wikimedia.org/wikipedia/commons/2/23/US-O7_insignia.svg') in empty_rating.getRatingList()
+    assert ('Name1', 1500, 5, 0, 1700,
+            'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CSGO/0e457516ba13817a45b6c2a1d262fe7d0599bcbc/csgo/pak01_dir/resource/flash/econ/status_icons/skillgroup13.png',
+            0) in empty_rating.getRatingList()
+    assert ('Name2', 1600, 6, 2, 1800,
+            'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CSGO/0e457516ba13817a45b6c2a1d262fe7d0599bcbc/csgo/pak01_dir/resource/flash/econ/status_icons/skillgroup15.png',
+            0) in empty_rating.getRatingList()
 
 
 @pytest.mark.unit_test
@@ -59,7 +63,7 @@ def test_save_ratings_and_matches_to_file(filled_rating):
     rating_file = open('test_ratings.txt', 'r')
     for player_data in rating_file.readlines():
         player_data_array = player_data.split('_')
-        assert len(player_data_array) == 5
+        assert len(player_data_array) == 6
         assert player_data_array[0] in ('Player1', 'Player2')
         assert int(player_data_array[2]) == 3
         assert int(player_data_array[3]) in (0, 3)

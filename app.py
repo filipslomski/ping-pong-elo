@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import sys
 import os
 sys.path.append(os.getcwd())
@@ -18,7 +18,7 @@ def load_data_from_file(rating):
         for player_data in rating_file.readlines():
             player_data_array = player_data.split('_')
             rating.addPlayer(player_data_array[0], float(player_data_array[1]), int(player_data_array[2]),
-                        int(player_data_array[3]), float(player_data_array[4]))
+                        int(player_data_array[3]), float(player_data_array[4]), int(player_data_array[5]))
         rating_file.close()
         match_file = open('matches.txt', 'r')
         for match_data in match_file.readlines():
@@ -60,6 +60,24 @@ def ping_pong():
     return render_template('ping-pong.html', rating_list=rating.getRatingList(), matches_list = rating.getMatchesList())
 
 
+@app.route('/get_ratings')
+def get_ratings():
+    dict = {}
+    iterator = 1
+    for player_rating in rating.getRatingList():
+        dict[iterator ] = {}
+        dict[iterator]['name'] = player_rating[0]
+        dict[iterator]['rating'] = player_rating[1]
+        dict[iterator]['matches'] = player_rating[2]
+        dict[iterator]['win_streak'] = player_rating[3]
+        dict[iterator]['highest_rating'] = player_rating[4]
+        dict[iterator]['rank_image'] = player_rating[5]
+        dict[iterator]['victories'] = player_rating[6]
+        iterator += 1
+
+    return jsonify(dict)
+
+
 @app.route('/fifa')
 def fifa():
     return render_template('fifa.html')
@@ -73,8 +91,8 @@ def record_match_and_update_files(rating, victorius, defeated, rating_file='rati
 
 def save_ratings_to_file(rating, file_name="ratings.txt"):
     rating_file = open(file_name, "w+")
-    for (player, ranking, matches, win_streak, highest_rating, rank_image) in rating.getRatingList():
-        rating_file.write("{}_{}_{}_{}_{}\n".format(player, ranking, matches, win_streak, highest_rating))
+    for (player, ranking, matches, win_streak, highest_rating, rank_image, victories) in rating.getRatingList():
+        rating_file.write("{}_{}_{}_{}_{}_{}\n".format(player, ranking, matches, win_streak, highest_rating, victories))
     rating_file.close()
 
 
