@@ -3,3 +3,8 @@ __pycache__/
 ratings.txt
 token.txt
 matches.txt
+gui/elm-stuff
+*.swp
+*.swo
+*.*~
+tags
