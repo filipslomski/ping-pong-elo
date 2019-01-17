@@ -2,8 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Ping-pong</title>
+    <title>Elo</title>
+    {% if debug %}
     <script src="/static/app.js"></script>
+    {% else %}
+    <script src="/static/app.min.js"></script>
+    {% endif %}
 </head>
 <body>
   <script>var app = Elm.Main.init({ flags: {{games|tojson|safe}} });</script>

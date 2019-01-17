@@ -9,18 +9,11 @@ def driver():
 
 
 @pytest.mark.selenium
-def test_ranking_display(driver):
-    driver.get('localhost:5000')
-    driver.find_element_by_id('ping-pong').click()
-    assert driver.find_element_by_xpath('.//h1').text == 'Player Elo Ranking'
-
-
-@pytest.mark.selenium
 def test_adding_player(driver):
     f = open('token.txt', 'r')
     token = f.read().strip()
     f.close()
-    driver.get('localhost:5000/admin')
+    driver.get('localhost:5000/admin/ping-pong')
     driver.find_element_by_id('playername').clear()
     driver.find_element_by_id('playername').send_keys('{} player1'.format(token))
     driver.find_element_by_id('addplayer').click()
@@ -30,7 +23,7 @@ def test_adding_player(driver):
 
 @pytest.mark.selenium
 def test_token(driver):
-    driver.get('localhost:5000/admin')
+    driver.get('localhost:5000/admin/ping-pong')
     driver.find_element_by_id('playername').clear()
     driver.find_element_by_id('playername').send_keys('player33')
     driver.find_element_by_id('addplayer').click()

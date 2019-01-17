@@ -1,4 +1,4 @@
-module Palette exposing (..)
+module Palette exposing (colorA1, colorA2, colorA3, colorA4, colorB1, colorB2, colorB3, colorB4, colorC1, colorC2, colorC3, colorC4)
 
 import Element exposing (..)
 
@@ -41,6 +41,7 @@ colorB3 =
 colorB4 : Color
 colorB4 =
     rgb255 101 74 40
+
 
 colorC1 : Color
 colorC1 =

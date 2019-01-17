@@ -53,8 +53,7 @@ renderPlayer st =
             el [ centerY, centerX ] <| text title
 
         td val =
-          el [height (px 50), width fill] (el [ Font.color colorB2, Font.size 18, centerX ] (text val) )
-
+            el [ height (px 50), width fill ] (el [ Font.color colorB2, Font.size 18, centerX ] (text val))
     in
     [ row
         [ width (fill |> maximum 1100 |> minimum 800), centerX, spacing 10 ]

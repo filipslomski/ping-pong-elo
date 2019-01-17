@@ -47,6 +47,7 @@ type SortBy
     | SWinStreak
     | SHighestRating
     | SVictories
+    | SWinRatio
 
 
 type SortDir
@@ -135,10 +136,6 @@ renderLeaderboard st =
               , width = fill
               , view = renderRating
               }
-            , { header = el (headerStyle SMatches) (thRight "Matches")
-              , width = fill
-              , view = renderMatches
-              }
             , { header = el (headerStyle SWinStreak) (thRight "Win streak")
               , width = fill
               , view = renderWinStreak
@@ -147,9 +144,9 @@ renderLeaderboard st =
               , width = fill
               , view = renderHighest
               }
-            , { header = el (headerStyle SVictories) (thRight "Victories")
+            , { header = el (headerStyle SWinRatio) (thRight "Win ratio")
               , width = fill
-              , view = renderVictories
+              , view = renderWinRatio
               }
             ]
         }
@@ -166,6 +163,11 @@ numCol v =
     el ratingColStyle <| el [ centerY, alignRight ] (text <| String.fromInt v)
 
 
+floatCol : Float -> Element Msg
+floatCol v =
+    el ratingColStyle <| el [ centerY, alignRight ] (text <| String.fromFloat v)
+
+
 renderPosition : Rating -> Element Msg
 renderPosition r =
     numCol r.position
@@ -173,23 +175,18 @@ renderPosition r =
 
 renderPlayer : Rating -> Element Msg
 renderPlayer r =
-  row
-    [ spacing 10 ]
-    [ image [ height (px 18) ] { src = r.rankImage, description = "Rank" } 
-    , link
-        ratingColStyle
-        { url = Url.relative ["ratings", r.name] [], label = el [ centerY, alignLeft ] (text r.name) }
-    ]
+    row
+        [ spacing 10 ]
+        [ image [ height (px 18) ] { src = r.rankImage, description = "Rank" }
+        , link
+            ratingColStyle
+            { url = Url.relative [ "ratings", r.name ] [], label = el [ centerY, alignLeft ] (text r.name) }
+        ]
 
 
 renderRating : Rating -> Element Msg
 renderRating r =
     numCol r.rating
-
-
-renderMatches : Rating -> Element Msg
-renderMatches r =
-    numCol r.matches
 
 
 renderWinStreak : Rating -> Element Msg
@@ -202,9 +199,14 @@ renderHighest r =
     numCol r.highestRating
 
 
-renderVictories : Rating -> Element Msg
-renderVictories r =
-    numCol r.victories
+round2 : Float -> Float
+round2 n =
+    toFloat (round (n * 100)) / 100
+
+
+renderWinRatio : Rating -> Element Msg
+renderWinRatio r =
+    floatCol <| round2 (toFloat r.victories / toFloat (max 1 r.matches))
 
 
 sortByField : SortBy -> SortDir -> List Rating -> List Rating
@@ -232,6 +234,11 @@ sortByField field dir =
 
                 SVictories ->
                     compare r1.victories r2.victories
+
+                SWinRatio ->
+                    compare
+                        (toFloat r1.victories / toFloat (max 1 r1.matches))
+                        (toFloat r2.victories / toFloat (max 1 r2.matches))
     in
     List.sortWith
         (\r1 r2 ->

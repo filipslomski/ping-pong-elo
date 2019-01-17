@@ -105,7 +105,7 @@ def get_player(game, player):
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def index(path):
-    return render_template('index.html', games=games)
+    return render_template('index.html', games=games, debug=app.debug)
 
 
 def record_match_and_update_files(rating, victorius, defeated, rating_file='ratings.txt', match_file='matches.txt'):
