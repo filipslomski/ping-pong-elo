@@ -1,4 +1,4 @@
-module Leaderboard exposing (Msg, Rating, State, emptyState, renderLeaderboard, update)
+module Leaderboard exposing (Msg, Rating, State, emptyState, getRatings, renderLeaderboard, update)
 
 import Element exposing (..)
 import Element.Background as Background
@@ -6,7 +6,11 @@ import Element.Border as Border
 import Element.Events as Events
 import Element.Font as Font
 import Element.Input as Input
+import Http
+import Json.Decode as D
 import Palette exposing (..)
+import String exposing (toLower)
+import Url.Builder as Url
 
 
 type alias State =
@@ -20,6 +24,7 @@ type alias State =
 type Msg
     = Sort SortBy SortDir
     | Filter String
+    | GotRatings (Result Http.Error (List Rating))
 
 
 type alias Rating =
@@ -51,10 +56,7 @@ type SortDir
 
 emptyState : State
 emptyState =
-    { ratings =
-        [ { position = 1, name = "Test player", rating = 1000, matches = 0, winStreak = 0, highestRating = 1000, rankImage = "", victories = 0 }
-        , { position = 2, name = "Second player", rating = 980, matches = 1, winStreak = 0, highestRating = 1000, rankImage = "", victories = 0 }
-        ]
+    { ratings = []
     , sortBy = SPosition
     , sortDir = Asc
     , filter = ""
@@ -101,12 +103,12 @@ renderLeaderboard st =
             el [ centerY, alignRight ] <| text title
     in
     [ Input.search
-      [ width (fill |> maximum 1100 |> minimum 800), focused [ ], centerX, Font.color colorA1, Background.color colorA4, Border.color colorA3 ]
-      { onChange = Filter
-      , text = st.filter
-      , placeholder = Just <| Input.placeholder [ Font.color colorA3 ] <| el [] (text "Enter player name")
-      , label = Input.labelLeft [ Font.color colorA2, padding 10 ] <| el [] (text "Search player")
-      }
+        [ width (fill |> maximum 1100 |> minimum 800), focused [], centerX, Font.color colorA1, Background.color colorA4, Border.color colorA3 ]
+        { onChange = Filter
+        , text = st.filter
+        , placeholder = Just <| Input.placeholder [ Font.color colorA3 ] <| el [] (text "Enter player name")
+        , label = Input.labelLeft [ Font.color colorA2, padding 10 ] <| el [ centerY ] (text "Search player")
+        }
     , table
         [ width (fill |> maximum 1100 |> minimum 800)
         , Background.color colorC4
@@ -119,7 +121,7 @@ renderLeaderboard st =
         , Border.roundEach { topLeft = 15, topRight = 15, bottomLeft = 0, bottomRight = 0 }
         , Border.shadow { offset = ( 0, 0 ), size = 1, blur = 15, color = rgba 0 0 0 0.25 }
         ]
-        { data = sortByField st.sortBy st.sortDir <| List.filter (String.contains st.filter << .name) st.ratings
+        { data = sortByField st.sortBy st.sortDir <| List.filter (String.contains (toLower st.filter) << toLower << .name) st.ratings
         , columns =
             [ { header = el (headerStyle SPosition) (thRight "#")
               , width = px 25
@@ -171,7 +173,13 @@ renderPosition r =
 
 renderPlayer : Rating -> Element Msg
 renderPlayer r =
-    el ratingColStyle <| el [ centerY, alignLeft ] (text r.name)
+  row
+    [ spacing 10 ]
+    [ image [ height (px 18) ] { src = r.rankImage, description = "Rank" } 
+    , link
+        ratingColStyle
+        { url = Url.relative ["ratings", r.name] [], label = el [ centerY, alignLeft ] (text r.name) }
+    ]
 
 
 renderRating : Rating -> Element Msg
@@ -257,7 +265,49 @@ update m st =
               }
             , Cmd.none
             )
+
         Filter val ->
             ( { st | filter = val }
             , Cmd.none
             )
+
+        GotRatings res ->
+            case res of
+                Ok r ->
+                    ( { st | ratings = List.indexedMap (\idx rr -> { rr | position = idx + 1 }) r }
+                    , Cmd.none
+                    )
+
+                Err _ ->
+                    ( st, Cmd.none )
+
+
+getRatings : String -> Cmd Msg
+getRatings gameUrl =
+    Http.get
+        { url = Url.absolute [ "get_ratings", gameUrl ] []
+        , expect = Http.expectJson GotRatings (D.list decodeRating)
+        }
+
+
+decodeRating : D.Decoder Rating
+decodeRating =
+    D.map7
+        (\n h m i r v w ->
+            { name = n
+            , rating = r
+            , matches = m
+            , winStreak = w
+            , highestRating = h
+            , rankImage = i
+            , victories = v
+            , position = 0
+            }
+        )
+        (D.field "name" D.string)
+        (D.field "highest_rating" D.int)
+        (D.field "matches" D.int)
+        (D.field "rank_image" D.string)
+        (D.field "rating" D.int)
+        (D.field "victories" D.int)
+        (D.field "win_streak" D.int)

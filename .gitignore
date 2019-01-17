@@ -1,8 +1,10 @@
 __pycache__/
 .idea/
 ratings.txt
+ratings_*.txt
 token.txt
 matches.txt
+matches_*.txt
 gui/elm-stuff
 *.swp
 *.swo

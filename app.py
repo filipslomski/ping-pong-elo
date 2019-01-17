@@ -5,27 +5,33 @@ sys.path.append(os.getcwd())
 from elopy import *
 
 app = Flask(__name__)
-rating = Implementation()
+games = [ { "name": "Ping pong", "url": "ping-pong" }, { "name": "FIFA", "url": "fifa" } ]
+ratings = {}
 
-
-def load_data_from_file(rating):
-    token = None
+def load_ratings_from_file(game, rating):
     try:
-        token_file = open('token.txt', 'r')
-        token = token_file.read().strip()
-        token_file.close()
-        rating_file = open('ratings.txt', 'r')
+        rating_file = open('ratings_' + game['url'] + '.txt', 'r')
         for player_data in rating_file.readlines():
             player_data_array = player_data.split('_')
             rating.addPlayer(player_data_array[0], float(player_data_array[1]), int(player_data_array[2]),
                         int(player_data_array[3]), float(player_data_array[4]), int(player_data_array[5]))
         rating_file.close()
-        match_file = open('matches.txt', 'r')
+        match_file = open('matches_' + game['url'] + '.txt', 'r')
         for match_data in match_file.readlines():
             if '_' in match_data:
                 match_data_array = match_data.split('_')
                 rating.addMatchToList(match_data_array[0], match_data_array[1].rstrip())
         match_file.close()
+    except FileNotFoundError:
+        print("File not found for " + game['name'])
+
+
+def load_token_from_file():
+    token = None
+    try:
+        token_file = open('token.txt', 'r')
+        token = token_file.read().strip()
+        token_file.close()
     except FileNotFoundError:
         if token is None:
             raise Exception('Token cannot be empty!')
@@ -33,37 +39,32 @@ def load_data_from_file(rating):
     return token
 
 
-token = load_data_from_file(rating)
+for game in games:
+    ratings[game['url']] = Implementation()
+    load_ratings_from_file(game, ratings[game['url']])
+
+token = load_token_from_file()
 
 
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-
-@app.route('/admin',  methods=('GET', 'POST'))
-def admin():
+@app.route('/admin/<gameUrl>',  methods=('GET', 'POST'))
+def admin(gameUrl):
     if request.method == 'POST':
         if len(request.form) == 1:
             if request.form['playername'].split(' ', 1)[0] == token:
-                rating.addPlayer(request.form['playername'].split(' ', 1)[1])
+                ratings[gameUrl].addPlayer(request.form['playername'].split(' ', 1)[1])
         else:
             if request.form['victorious'].split(' ', 1)[0] == token:
                 victorious = request.form['victorious'].split(' ', 1)[1]
-                record_match_and_update_files(rating, victorious, request.form['defeated'])
+                record_match_and_update_files(ratings[gameUrl], victorious, request.form['defeated'], 'ratings_' + gameUrl + '.txt', 'matches_' + gameUrl + '.txt')
 
-    return render_template('admin.html', rating_list=rating.getRatingList(), matches_list = rating.getMatchesList())
-
-
-@app.route('/ping-pong')
-def ping_pong():
-    return render_template('ping-pong.html', rating_list=rating.getRatingList(), matches_list = rating.getMatchesList())
+    return render_template('admin.html', rating_list=ratings[gameUrl].getRatingList(), matches_list = ratings[gameUrl].getMatchesList())
 
 
-@app.route('/get_ratings')
-def get_ratings():
+@app.route('/get_ratings/<game>')
+def get_ratings(game):
     array = []
-    for player_rating in rating.getRatingList():
+    gameUrl = next(filter(lambda g: g['url'] == game, games))['url']
+    for player_rating in ratings[gameUrl].getRatingList():
         dict = {}
         dict['name'] = player_rating[0]
         dict['rating'] = player_rating[1]
@@ -77,9 +78,34 @@ def get_ratings():
     return jsonify(array)
 
 
-@app.route('/fifa')
-def fifa():
-    return render_template('fifa.html')
+@app.route('/get_player/<game>/<player>')
+def get_player(game, player):
+    matches = []
+    pl = {}
+    gameUrl = next(filter(lambda g: g['url'] == game, games))['url']
+    for match in ratings[gameUrl].getMatchesList():
+        if player == match[0] or player == match[1]:
+            dict = {}
+            dict['victorious'] = match[0]
+            dict['defeated'] = match[1]
+            matches.append(dict)
+    pos = 0
+    for player_rating in ratings[gameUrl].getRatingList():
+        pos += 1
+        if player_rating[0] == player:
+            pl['name'] = player_rating[0]
+            pl['rating'] = player_rating[1]
+            pl['rank_image'] = player_rating[5]
+            pl['position'] = pos
+            pl['matches'] = matches
+
+    return jsonify(pl)
+
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def index(path):
+    return render_template('index.html', games=games)
 
 
 def record_match_and_update_files(rating, victorius, defeated, rating_file='ratings.txt', match_file='matches.txt'):
