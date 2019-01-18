@@ -2,11 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Ping-pong</title>
+    <title>Elo</title>
+    {% if debug %}
+    <script src="/static/app.js"></script>
+    {% else %}
+    <script src="/static/app.min.js"></script>
+    {% endif %}
 </head>
 <body>
-<a id = 'ping-pong' href="{{ url_for('ping_pong') }}">Ping Pong Ranking</a>
-<br>
-<a id = 'fifa' href="{{ url_for('fifa') }}">Fifa Ranking</a>
+  <script>var app = Elm.Main.init({ flags: {{games|tojson|safe}} });</script>
 </body>
 </html>
